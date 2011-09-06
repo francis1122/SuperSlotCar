@@ -12,7 +12,7 @@
 @implementation TrackVO
 
 @synthesize trackPoints;
-@synthesize xmlString, currentCurve;
+@synthesize xmlString, currentCurve, isParsing;
 
 - (id)init
 {
@@ -20,6 +20,7 @@
     if (self) {
         // Initialization code here.
         self.trackPoints = [[NSMutableArray alloc] init];
+        self.isParsing = YES;
     }
     
     return self;
@@ -33,29 +34,19 @@
 
 
 
-
-
-
-
 # pragma mark ---------- PARSER ----------
 // parse the level assets for use in gameplay
--(void) parseTrack {
+-(void) parseTrack:(NSString*) trackFilename{
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:trackFilename ofType:@"xml"];
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES);
-    NSString *desktopDirectory = [paths objectAtIndex:0];
-    NSString *filename = [desktopDirectory stringByAppendingPathComponent: @"track00.xml"];
-    
-	NSData *trackData = [[NSData alloc] initWithContentsOfFile:filename];
+	NSData *trackData = [[NSData alloc] initWithContentsOfFile:filePath];
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:trackData];
 	[xmlParser setDelegate:self];
+    self.isParsing = YES;
 	[xmlParser parse];	
 	[trackData release];
 	[xmlParser autorelease];
 }
-
-
-
-
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
     
@@ -64,8 +55,6 @@
         self.currentCurve = [[[BezierCurve alloc] init] autorelease];
         [self.trackPoints addObject:currentCurve];
     }
-    
-	
 }
 
 
@@ -118,7 +107,11 @@
 
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-
+    //calculate arc Lengths here
+    for(BezierCurve *curve in self.trackPoints){
+        [curve computeArcLengths];
+    }
+    self.isParsing = NO;
 }
 
 

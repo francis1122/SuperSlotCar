@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-
+@class TrackVO;
 @interface MasterDataModel : NSObject {
     
 }
+
++ (id)sharedInstance;
+
+-(TrackVO*) getTrackVOByFilename:(NSString*) trackFilename;
 
 @end

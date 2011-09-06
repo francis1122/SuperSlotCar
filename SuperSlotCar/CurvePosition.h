@@ -11,6 +11,13 @@
 
 @interface CurvePosition : NSObject {
     
+    int index;
+    float time;
 }
+
+@property int index;
+@property float time;
+
+-(id) initWithIndex:(int) i andTime:(float)t;
 
 @end

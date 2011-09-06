@@ -11,4 +11,13 @@
 
 @implementation CurvePosition
 
+@synthesize time;
+@synthesize index;
+
+-(id) initWithIndex:(int) i andTime:(float)t{
+    self.time = t;
+    self.index = i;
+    return self;
+}
+
 @end

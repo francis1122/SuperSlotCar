@@ -13,4 +13,8 @@
     
 }
 
+-(void) resolve;
+
+-(void) createRect:(CGRect) rect WithTexture:(NSString*) texture;
+
 @end

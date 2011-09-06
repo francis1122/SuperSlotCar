@@ -9,8 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 
+@class LevelLayer;
+@class GameUILayer;
+@class BackgroundLayer;
 @interface GameLayer : CCLayer {
+    LevelLayer *levelLayer;
+    GameUILayer *gameUILayer;
+    BackgroundLayer *backgroundLayer;
     
 }
+
+//@property (nonatomic, retain) LevelLayer *levelLayer;
+//@property (nonatomic, retain) GameUILayer *gameUILayer;
+//@property (nona
 
 @end

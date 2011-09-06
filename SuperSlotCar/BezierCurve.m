@@ -40,7 +40,7 @@
     CGPoint previousPos = start;
     for( i = 0; i < 128; i++){
         float t = (float)i/127;
-        CGPoint currentPosition = [self findPositionOnCurve:self atTime:t];
+        CGPoint currentPosition = [BezierCurve findPositionOnCurve:self atTime:t];
         float dist = length + sqrtf(pow(previousPos.x - currentPosition.x, 2) + pow(previousPos.y - currentPosition.y, 2));
         NSNumber *distance = [NSNumber numberWithFloat: dist];
         length = [distance floatValue];
@@ -51,13 +51,6 @@
 }
 
 
--(CGPoint) findPositionOnCurve:(BezierCurve *)curve atTime:(float) t{
-    //position
-
-    float px = powf(1 - t, 3) * curve.start.x + 3.0f * powf(1 - t, 2) * t * curve.control1.x + 3.0f * (1 - t) * t * t * curve.control2.x + t * t * t * curve.end.x;
-    float py = powf(1 - t, 3) * curve.start.y + 3.0f * powf(1 - t, 2) * t * curve.control1.y + 3.0f * (1 - t) * t * t * curve.control2.y + t * t * t * curve.end.y;
-    return ccp(px, py);
-}
 
 -(float) getArcLength:(float) u1{
 
@@ -130,9 +123,38 @@
     
     
     //use interpolation with low and high s to get time and return it
-    
-    
-    
 }
+
+
++(CGPoint) findPositionOnCurve:(BezierCurve *)curve atTime:(float) t{
+    //position
+    
+    float px = powf(1 - t, 3) * curve.start.x + 3.0f * powf(1 - t, 2) * t * curve.control1.x + 3.0f * (1 - t) * t * t * curve.control2.x + t * t * t * curve.end.x;
+    float py = powf(1 - t, 3) * curve.start.y + 3.0f * powf(1 - t, 2) * t * curve.control1.y + 3.0f * (1 - t) * t * t * curve.control2.y + t * t * t * curve.end.y;
+    return ccp(px, py);
+}
+
++(CGPoint) findDerivativeOnCurve:(BezierCurve *)curve atTime:(float) t{
+    float x = 3*(curve.control1.x - curve.start.x)*(1-t)*(1-t)+3*(curve.control2.x - curve.control1.x)*2*t*(1-t)+3*(curve.end.x-curve.control2.x)*t*t;
+    
+    float y = 3*(curve.control1.y - curve.start.y)*(1-t)*(1-t)+3*(curve.control2.y - curve.control1.y)*2*t*(1-t)+3*(curve.end.y-curve.control2.y)*t*t;
+    return ccp(x, y);
+}
+
++(CGPoint) findSecondDerivativeOnCurve:(BezierCurve*) curve atTime:(float) t{
+    float x = (-6 * t + 6) * curve.start.x + (18 * t - 12) * curve.control1.x + (-18 * t + 6) * curve.control2.x + 6 * t * curve.end.x;
+    
+    float y = (-6 * t + 6) * curve.start.y + (18 * t - 12) * curve.control1.y + (-18 * t + 6) * curve.control2.y + 6 * t * curve.end.y;
+    return ccp(x,y);
+}
+
++(float) arcLengthForCurve:(BezierCurve*) curve between:(float) u1 and:(float) u2{
+    
+    //find values that match u1 and u2
+    //32 arc points in mapping
+    float distance = [curve getArcLength:u2] - [curve getArcLength:u1];
+    return distance;
+}
+
 
 @end

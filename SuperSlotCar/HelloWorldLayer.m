@@ -9,9 +9,14 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "MasterDataModel.h"
+#import "cocos2d.h"
 
 // HelloWorldLayer implementation
 @implementation HelloWorldLayer
+
+
+//@end HelloWorldLayer
 
 +(CCScene *) scene
 {
@@ -46,6 +51,11 @@
 		
 		// add the label as a child to this Layer
 		[self addChild: label];
+        MasterDataModel *MDM = [MasterDataModel sharedInstance];
+        
+        TrackVO *track = [MDM getTrackVOByFilename:@"track00"];
+        
+        
 	}
 	return self;
 }

@@ -15,12 +15,15 @@
     BezierCurve *currentCurve;
     
     NSMutableString *xmlString;
+    
+    BOOL isParsing;
 }
 
 @property (nonatomic, retain) NSMutableArray *trackPoints;
 @property (nonatomic, retain) NSMutableString *xmlString;
 @property (nonatomic, retain) BezierCurve *currentCurve;
+@property BOOL isParsing;
 
--(void) parseTrack;
+-(void) parseTrack:(NSString*) trackFilename;
 
 @end

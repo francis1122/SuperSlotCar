@@ -10,7 +10,19 @@
 #import "cocos2d.h"
 
 @interface LevelLayer : CCLayer {
+
+    
     
 }
+
+-(id) init;
+
+-(void)dealloc;
+
+-(void) createTrack:(TrackVO*) track WithTexture:(NSString*) texture;
+
+-(void) update:(ccTime) dt;
+
+-(void) draw;
 
 @end

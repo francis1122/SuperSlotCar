@@ -16,18 +16,23 @@
     NSMutableArray *arcLengthArray;
     
     
-    
-    
-    
 }
 @property (retain,nonatomic) NSMutableArray *arcLengthArray;
 @property CGPoint start, end, control1, control2;
 
 
 -(void) computeArcLengths;
--(CGPoint) findPositionOnCurve:(BezierCurve *)curve atTime:(float) t;
--(CGPoint) findSecondDerivativeOnCurve:(BezierCurve*) curve atTime:(float) t;
+
 -(float) getArcLength:(float) u1;
 
 -(float) findTimeGiven:(float) position;
+
++(CGPoint) findPositionOnCurve:(BezierCurve *)curve atTime:(float) t;
+
++(CGPoint) findDerivativeOnCurve:(BezierCurve *)curve atTime:(float) t;
+
++(CGPoint) findSecondDerivativeOnCurve:(BezierCurve*) curve atTime:(float) t;
+
++(float) arcLengthForCurve:(BezierCurve*) curve between:(float) u1 and:(float) u2;
+
 @end

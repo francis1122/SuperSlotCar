@@ -8,7 +8,21 @@
 
 #import "LevelModel.h"
 
+static LevelModel *sharedInstance = nil;
+
 @implementation LevelModel
+
+@synthesize trackVO, playerCar, isTouching, touchBegan, previousTouch, currentTouch, touchEnd,
+gameLayer, gameUILayer, levelLayer, backgroundLayer;
+
++ (id)sharedInstance{ 
+    @synchronized(self){
+        if(sharedInstance == nil)
+            sharedInstance = [[[self class] alloc] init];
+    }
+    return sharedInstance;
+}
+
 
 - (id)init
 {
@@ -18,6 +32,14 @@
     }
     
     return self;
+}
+
+
+-(void) dealloc{
+    
+    //need to release every retained property
+    
+    [super dealloc];	
 }
 
 @end
