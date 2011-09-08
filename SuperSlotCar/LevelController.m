@@ -76,15 +76,15 @@
 //    if(carSpeed 
     float zoom = 1/ ((logf(carSpeed/150 + a) - (logf(a) - logf(b)))/  logf(b));
 //    NSLog(@"zoom: %f",zoom);
-    NSLog(@"zoom: %f", zoom);
-    NSLog(@"carSpeed: %f", carSpeed);
+//    NSLog(@"zoom: %f", zoom);
+  //  NSLog(@"carSpeed: %f", carSpeed);
     
     if(zoom > 1){
         zoom = 1;
     }
 
     float zoomDif = preZoom - zoom;
-    float maxChange = 0.015;
+    float maxChange = 0.004;
     if(fabs(zoomDif) > maxChange){
         if(preZoom < zoom){
             zoom = preZoom + maxChange;
@@ -118,20 +118,52 @@
     if(LM.isTouching){
         LM.playerCar.speed += 1.0;
     }
-    
-    
+
     //deceleration of the car
     car.speed = car.speed * 0.98;
     car.boost = car.boost * 0.9745;
+    car.lifeTime += dt;
     
+
+    
+
+    [LevelController carPositionUpdate:car AlongTrack:track];
+
+    
+}
+
++(void) carPositionUpdate:(CarSprite*) car AlongTrack:(TrackVO*) track{
     //update the cars position
     BezierCurve *carCurve = [track.trackPoints objectAtIndex:car.carTrackPosition.index];
-    CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:car.carTrackPosition.time];
+    CGPoint position = [BezierCurve findPositionOnCurve:carCurve atTime:car.carTrackPosition.time];
+    CGPoint deltaPosition = [BezierCurve findDerivativeOnCurve:carCurve atTime:car.carTrackPosition.time];
+    
+    GLfloat offset = 8 * (logf(car.boost)/logf(2.6));
+    if(offset < 8){
+        offset = 8;
+    }
+    float offsetDifference = car.offset - offset;
+    if(fabs(offsetDifference) > 0.7){
+        if(car.offset < offset){
+            offset = car.offset + 0.7f;
+        }else{
+            offset = car.offset - 0.7f;
+        }
+    }
+    float bobbing = 3*sinf(car.lifeTime*2);
+    car.offset = offset;
+    offset += bobbing;
+    GLfloat offsetX = position.x - offset * (deltaPosition.y/sqrtf(deltaPosition.x * deltaPosition.x + deltaPosition.y * deltaPosition.y));
+    GLfloat offsetY = position.y - offset * (-deltaPosition.x/ sqrtf(deltaPosition.x * deltaPosition.x + deltaPosition.y * deltaPosition.y));
+    
+    
+    CGPoint offsetPosition = ccp(offsetX * CC_CONTENT_SCALE_FACTOR(), offsetY * CC_CONTENT_SCALE_FACTOR());
+    
     car.previousPosition = car.position;
-    car.position = carSpot;
+    car.position = offsetPosition;
+
     
     [LevelController carRotation:car ForTrack:track];
-    
 }
 
 +(void) carHealthUpdate:(CarSprite*) car WithDelta:(ccTime)dt{

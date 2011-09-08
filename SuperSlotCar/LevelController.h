@@ -22,6 +22,8 @@
 
 +(void) carMovement:(CarSprite*) car AlongTrack:(TrackVO*) track WithDelta:(ccTime)dt;
 
++(void) carPositionUpdate:(CarSprite*) car AlongTrack:(TrackVO*) track;
+
 +(void) carHealthUpdate:(CarSprite*) car WithDelta:(ccTime)dt;
 
 +(void) carRotation:(CarSprite*) car ForTrack:(TrackVO*) track;

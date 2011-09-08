@@ -12,7 +12,7 @@
 
 @implementation CarSprite
 
-@synthesize carTrackPosition, health, speed, boost, previousPosition, previousVelocity, currentVelocity;
+@synthesize carTrackPosition, health, speed, boost, previousPosition, previousVelocity, currentVelocity, offset, bobbing, lifeTime;
 
 -(id) initWithTexture:(CCTexture2D*)texture rect:(CGRect)rect
 {
@@ -29,6 +29,9 @@
         self.health = 0.0f;
         self.speed = 0.7f;
         self.boost = 0.0f;
+        self.offset = 9.0f;
+        self.lifeTime = 0.0f;
+        self.bobbing = 0.0f;
         
 	}
 	return self;

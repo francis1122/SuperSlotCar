@@ -12,6 +12,9 @@
 @interface CarSprite : CCSprite {
     
     CurvePosition *carTrackPosition;
+
+    //how long entity has been alive for
+    float lifeTime;
     
     CGPoint previousPosition;
     CGPoint previousVelocity;
@@ -20,10 +23,15 @@
     float health;
     float speed;
     float boost;
+    
+    //position and hovering variables
+    float offset;
+    float bobbing;
+
 }
 @property CGPoint previousPosition, previousVelocity, currentVelocity;
 @property (nonatomic, retain) CurvePosition *carTrackPosition;
-@property float health, speed, boost;
+@property float health, speed, boost, offset, bobbing, lifeTime;
 
 -(void)update:(ccTime) dt;
 
