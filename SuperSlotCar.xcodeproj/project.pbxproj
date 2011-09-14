@@ -24,6 +24,9 @@
 		DECFA89513E9208C00FE7C7E /* TrackVO.m in Sources */ = {isa = PBXBuildFile; fileRef = DECFA89413E9208C00FE7C7E /* TrackVO.m */; };
 		DECFA89813E922A300FE7C7E /* track00.xml in Resources */ = {isa = PBXBuildFile; fileRef = DECFA89713E922A300FE7C7E /* track00.xml */; };
 		DECFA8A313E9268C00FE7C7E /* LevelScene.m in Sources */ = {isa = PBXBuildFile; fileRef = DECFA8A213E9268B00FE7C7E /* LevelScene.m */; };
+		DED1B2FD1420254000E77095 /* MenuLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DED1B2FC1420254000E77095 /* MenuLayer.m */; };
+		DED1B3001420323F00E77095 /* TimeTrailLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = DED1B2FF1420323F00E77095 /* TimeTrailLayer.m */; };
+		DED1B3081420731B00E77095 /* track01.xml in Resources */ = {isa = PBXBuildFile; fileRef = DED1B3071420731B00E77095 /* track01.xml */; };
 		DEEFBA9113D93B27004B360D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEEFBA9013D93B27004B360D /* QuartzCore.framework */; };
 		DEEFBA9313D93B27004B360D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEEFBA9213D93B27004B360D /* OpenGLES.framework */; };
 		DEEFBA9513D93B27004B360D /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEEFBA9413D93B27004B360D /* OpenAL.framework */; };
@@ -178,6 +181,11 @@
 		DECFA89713E922A300FE7C7E /* track00.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = track00.xml; sourceTree = "<group>"; };
 		DECFA8A113E9268B00FE7C7E /* LevelScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelScene.h; sourceTree = "<group>"; };
 		DECFA8A213E9268B00FE7C7E /* LevelScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelScene.m; sourceTree = "<group>"; };
+		DED1B2FB1420254000E77095 /* MenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuLayer.h; sourceTree = "<group>"; };
+		DED1B2FC1420254000E77095 /* MenuLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuLayer.m; sourceTree = "<group>"; };
+		DED1B2FE1420323F00E77095 /* TimeTrailLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTrailLayer.h; sourceTree = "<group>"; };
+		DED1B2FF1420323F00E77095 /* TimeTrailLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTrailLayer.m; sourceTree = "<group>"; };
+		DED1B3071420731B00E77095 /* track01.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = track01.xml; sourceTree = "<group>"; };
 		DEEFBA8C13D93B27004B360D /* SuperSlotCar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SuperSlotCar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEEFBA9013D93B27004B360D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DEEFBA9213D93B27004B360D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -518,6 +526,17 @@
 			name = Tracks;
 			sourceTree = "<group>";
 		};
+		DED1B2F91420251A00E77095 /* MenuLayers */ = {
+			isa = PBXGroup;
+			children = (
+				DED1B2FB1420254000E77095 /* MenuLayer.h */,
+				DED1B2FC1420254000E77095 /* MenuLayer.m */,
+				DED1B2FE1420323F00E77095 /* TimeTrailLayer.h */,
+				DED1B2FF1420323F00E77095 /* TimeTrailLayer.m */,
+			);
+			name = MenuLayers;
+			sourceTree = "<group>";
+		};
 		DEEFBA8113D93B26004B360D = {
 			isa = PBXGroup;
 			children = (
@@ -563,6 +582,7 @@
 				DEEFBBF613D93B2A004B360D /* RootViewController.m */,
 				DEEFBBF813D93B2A004B360D /* HelloWorldLayer.h */,
 				DEEFBBF913D93B2A004B360D /* HelloWorldLayer.m */,
+				DED1B2F91420251A00E77095 /* MenuLayers */,
 				DE1FDF0A13F20CFC003EB6B6 /* GameObjects */,
 				DE7E2FD113E928C500DD89AD /* LevelScene */,
 				DEEFBBFB13D93B2A004B360D /* GameConfig.h */,
@@ -578,6 +598,7 @@
 			children = (
 				DE201F2E140B65FC00D62448 /* track0BG.png */,
 				DECFA89713E922A300FE7C7E /* track00.xml */,
+				DED1B3071420731B00E77095 /* track01.xml */,
 				DECFA89613E9229400FE7C7E /* Tracks */,
 				DEEFBAA213D93B27004B360D /* Default.png */,
 				DEEFBAA413D93B27004B360D /* fps_images.png */,
@@ -962,6 +983,7 @@
 				DEEFBAB413D93B27004B360D /* iTunesArtwork in Resources */,
 				DECFA89813E922A300FE7C7E /* track00.xml in Resources */,
 				DE201F2F140B65FC00D62448 /* track0BG.png in Resources */,
+				DED1B3081420731B00E77095 /* track01.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1088,6 +1110,8 @@
 				DE201F2C140B5D1500D62448 /* PRRatcliffTriangulator.mm in Sources */,
 				DE201F2D140B5D1500D62448 /* triangulate.cpp in Sources */,
 				DE7D1D73141295EB00FB40F8 /* BackgroundLayer.m in Sources */,
+				DED1B2FD1420254000E77095 /* MenuLayer.m in Sources */,
+				DED1B3001420323F00E77095 /* TimeTrailLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

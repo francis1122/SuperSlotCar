@@ -56,7 +56,7 @@
 
 
 +(void) update:(ccTime) dt{
-        LevelModel *LM = [LevelModel sharedInstance];
+    LevelModel *LM = [LevelModel sharedInstance];
     
     [LevelController carMovement:LM.playerCar AlongTrack:LM.trackVO WithDelta:dt];
     [LevelController cameraMovementCenteredOn:LM.playerCar ForLayer:LM.levelLayer];
@@ -72,17 +72,17 @@
     if(carSpeed < 50){
         carSpeed = 50;
     }
-
-//    if(carSpeed 
+    
+    //    if(carSpeed 
     float zoom = 1/ ((logf(carSpeed/150 + a) - (logf(a) - logf(b)))/  logf(b));
-//    NSLog(@"zoom: %f",zoom);
-//    NSLog(@"zoom: %f", zoom);
-  //  NSLog(@"carSpeed: %f", carSpeed);
+    //    NSLog(@"zoom: %f",zoom);
+    //    NSLog(@"zoom: %f", zoom);
+    //  NSLog(@"carSpeed: %f", carSpeed);
     
     if(zoom > 1){
         zoom = 1;
     }
-
+    
     float zoomDif = preZoom - zoom;
     float maxChange = 0.004;
     if(fabs(zoomDif) > maxChange){
@@ -99,7 +99,7 @@
     
     layer.scaleX = zoom;
     layer.scaleY = zoom;
-
+    
     CGPoint layerPosition = ccp( 240*layer.scaleX - car.position.x*layer.scaleX, 180*layer.scaleY - car.position.y*layer.scaleY);
     layer.position = layerPosition;
     
@@ -116,20 +116,17 @@
     [LevelController findParameterOnTrack:LM.trackVO WithCar:car WithSpeed:realSpeed*dt];
     
     if(LM.isTouching){
-        LM.playerCar.speed += 1.0;
+        LM.playerCar.speed += 0.0;
     }
-
+    
     //deceleration of the car
     car.speed = car.speed * 0.98;
-    car.boost = car.boost * 0.9745;
+    car.boost = car.boost * 0.983;
+    if(car.boost < 0.5){
+        car.boost = 0.5;
+    }
     car.lifeTime += dt;
-    
-
-    
-
     [LevelController carPositionUpdate:car AlongTrack:track];
-
-    
 }
 
 +(void) carPositionUpdate:(CarSprite*) car AlongTrack:(TrackVO*) track{
@@ -138,6 +135,8 @@
     CGPoint position = [BezierCurve findPositionOnCurve:carCurve atTime:car.carTrackPosition.time];
     CGPoint deltaPosition = [BezierCurve findDerivativeOnCurve:carCurve atTime:car.carTrackPosition.time];
     
+    
+    //used to hover the car above the ground depending on speed
     GLfloat offset = 8 * (logf(car.boost)/logf(2.6));
     if(offset < 8){
         offset = 8;
@@ -150,7 +149,7 @@
             offset = car.offset - 0.7f;
         }
     }
-    float bobbing = 3*sinf(car.lifeTime*2);
+    float bobbing = 6*sinf(car.lifeTime*3);
     car.offset = offset;
     offset += bobbing;
     GLfloat offsetX = position.x - offset * (deltaPosition.y/sqrtf(deltaPosition.x * deltaPosition.x + deltaPosition.y * deltaPosition.y));
@@ -161,7 +160,7 @@
     
     car.previousPosition = car.position;
     car.position = offsetPosition;
-
+    
     
     [LevelController carRotation:car ForTrack:track];
 }
@@ -169,15 +168,41 @@
 +(void) carHealthUpdate:(CarSprite*) car WithDelta:(ccTime)dt{
     car.previousVelocity = car.currentVelocity;
     car.currentVelocity = ccp(car.position.x - car.previousPosition.x,
-                                       car.position.y - car.previousPosition.y);
+                              car.position.y - car.previousPosition.y);
     
-    float angleBetweenVelocity = [MathLib calcAngleBetweenVectors:car.currentVelocity and:car.previousVelocity]/4;
-    if(angleBetweenVelocity > 1){
-        car.health += angleBetweenVelocity - 1; 
-    }else{
-        if(car.health > 0){
-            car.health -= 0.04;
+    
+    //checks make sure the numbers dont break the health system
+    if(car.lifeTime > 1.0f && car.boost > 25.0f){
+        car.normalizeState++;
+        if(car.normalizeState > 4){
+            float angleBetweenVelocity = [MathLib calcAngleBetweenVectors:car.currentVelocity and:car.previousVelocity];
+//            NSLog(@"angleBetweenVelocity: %f", angleBetweenVelocity);
+//            if(angleBetweenVelocity > 1.0f){
+    //            car.health += angleBetweenVelocity - 1.0f; 
+  //          }
+            float change = angleBetweenVelocity/4;
+                            NSLog(@"change: %f", angleBetweenVelocity);
+            if(!isnan(angleBetweenVelocity)){
+  //              NSLog(@"change: %f", change);
+                float lim = 0.4f;
+                if(change > lim){
+                    car.health += change - lim;
+                }
+            }
+            //evaluate if the health is to high and the car should be inactive
+            if(car.health > 10.0f){
+                car.isCoolingDown = YES;
+            }
         }
+    }else{
+        car.normalizeState = 0;
+    }
+    if(car.health > 0.0f){
+        car.health -= 0.07f;
+    }
+    if(car.health < 0.0f){
+        car.health = 0.0f;
+        car.isCoolingDown = NO;
     }
 }
 
@@ -187,7 +212,7 @@
     float magnitude = sqrtf(dC.x * dC.x + dC.y * dC.y);
     float normalX = dC.y/magnitude;
     float normalY = -dC.x/magnitude;
-//    float angle = [MathLib calcAngle:ccp(0,0) and:ccp(normalX,normalY)];
+    //    float angle = [MathLib calcAngle:ccp(0,0) and:ccp(normalX,normalY)];
     
     float playerRotation =     atan2f(normalY,normalX);
     car.rotation = ((-playerRotation)*180/M_PI) - 90;
@@ -199,11 +224,13 @@
 #pragma touch
 +(void) carBoostPreviousPos:(CGPoint) previousPosition AndCurrentPos:(CGPoint)currentPosition{
     LevelModel *LM = [LevelModel sharedInstance];
-    float dist = [MathLib distanceBetweenPoint:LM.previousTouch and:LM.currentTouch];
-    LM.playerCar.boost += dist * 1;
+    if(!LM.playerCar.isCoolingDown){
+        float dist = [MathLib distanceBetweenPoint:LM.previousTouch and:LM.currentTouch];
+        LM.playerCar.boost += dist * 1;
+    }
     
 }
-    
-    
-    
-    @end
+
+
+
+@end

@@ -64,9 +64,9 @@
     LevelModel *LM = [LevelModel sharedInstance];
     
     //draw health bar
-    float line = LM.playerCar.health* 10;
+  //  float line = LM.playerCar.health* 10;
     //        float line = 500/5;
-    ccDrawLine(ccp(20,  200), ccp( 20 + line, 200));
+//    ccDrawLine(ccp(20,  200), ccp( 20 + line, 200));
     
 }
 

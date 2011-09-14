@@ -11,8 +11,10 @@
 @class TrackVO;
 @interface MasterDataModel : NSObject {
     
+    
+    NSString* currentTrackFile;
 }
-
+@property (nonatomic, retain) NSString *currentTrackFile;
 + (id)sharedInstance;
 
 -(TrackVO*) getTrackVOByFilename:(NSString*) trackFilename;

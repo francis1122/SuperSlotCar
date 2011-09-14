@@ -29,10 +29,18 @@
     LevelModel *LM = [LevelModel sharedInstance];
 
     //draw health bar
-    float line = LM.playerCar.health* 10;
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    if(LM.playerCar.isCoolingDown){
+        glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+    }
+    float line = LM.playerCar.health* 15;
     //        float line = 500/5;
     ccDrawLine(ccp(20,  20), ccp( 20 + line, 20));
     
+    glColor4f(1, 1, 1, 1);
+    //speedLine
+    float speed = LM.playerCar.boost/10;
+    ccDrawLine(ccp(20, 20), ccp(20, 20 + speed));
 }
 
 

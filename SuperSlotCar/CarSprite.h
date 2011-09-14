@@ -12,6 +12,9 @@
 @interface CarSprite : CCSprite {
     
     CurvePosition *carTrackPosition;
+    
+    //is YES when health gets to high
+    BOOL isCoolingDown;
 
     //how long entity has been alive for
     float lifeTime;
@@ -19,8 +22,11 @@
     CGPoint previousPosition;
     CGPoint previousVelocity;
     CGPoint currentVelocity;
-    //float
+
     float health;
+ 
+    //movement variables
+    int normalizeState;
     float speed;
     float boost;
     
@@ -28,10 +34,16 @@
     float offset;
     float bobbing;
 
+    
+    //displayed speed and health
+    float displayedSpeed;
+    float displayedHeatlh;
 }
 @property CGPoint previousPosition, previousVelocity, currentVelocity;
 @property (nonatomic, retain) CurvePosition *carTrackPosition;
-@property float health, speed, boost, offset, bobbing, lifeTime;
+@property float health, speed, boost, offset, bobbing, lifeTime, displayedSpeed, displayedHeatlh;
+@property BOOL isCoolingDown;
+@property int normalizeState;
 
 -(void)update:(ccTime) dt;
 

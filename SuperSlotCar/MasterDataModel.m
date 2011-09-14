@@ -13,6 +13,8 @@ static MasterDataModel *sharedInstance = nil;
 
 @implementation MasterDataModel
 
+@synthesize currentTrackFile;
+
 + (id)sharedInstance{ 
     @synchronized(self){
         if(sharedInstance == nil)
@@ -25,7 +27,7 @@ static MasterDataModel *sharedInstance = nil;
 {
     self = [super init];
     if (self) {
-        // Initialization code here.
+        self.currentTrackFile = NULL;
         
     }
     

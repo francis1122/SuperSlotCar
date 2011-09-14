@@ -35,6 +35,7 @@
 //vector math
 
 +(float) calcAngleBetweenVectors:(CGPoint) v1 and:(CGPoint) v2{
+    
     float dot = v1.x * v2.x + v1.y * v2.y;
     float angle = acosf(dot/( sqrt(powf(v1.x,2) + powf(v1.y,2)) * sqrt(powf(v2.x,2) + powf(v2.y,2)))  );
     return angle * 180/M_PI;

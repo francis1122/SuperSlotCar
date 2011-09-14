@@ -12,6 +12,7 @@
 #import "CarSprite.h"
 #import "LevelModel.h"
 #import "PRFilledPolygon.h"
+#import "MenuLayer.h"
 
 
 @implementation LevelLayer
@@ -25,7 +26,12 @@
         MasterDataModel *MDM = [MasterDataModel sharedInstance];
         //load track
         LevelModel *LM = [LevelModel sharedInstance];
-        LM.trackVO = [MDM getTrackVOByFilename:@"track00"];
+        if(MDM.currentTrackFile != NULL){
+            LM.trackVO = [MDM getTrackVOByFilename:MDM.currentTrackFile];
+        }else{
+            NSLog(@"no Level loading in, we need to crash");
+            [[CCDirector sharedDirector] replaceScene:[MenuLayer node]];
+        }
         
         
         LM.playerCar = [[CarSprite alloc] initWithFile:@"Icon-72.png"];
@@ -138,7 +144,7 @@
     
   //  CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:self.carPosition.time];
         LevelModel *LM = [LevelModel sharedInstance];
-    ccDrawCircle(LM.playerCar.position, 10,0,16,NO);
+//    ccDrawCircle(LM.playerCar.position, 10,0,16,NO);
     
     if( LM.trackVO != NULL){
         if( ![LM.trackVO isParsing] ){
