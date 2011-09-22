@@ -43,12 +43,19 @@
     return self;
 }
 
+-(void) resolve{
+    //make sure things are setup for the first frame
+    LevelModel *LM = [LevelModel sharedInstance];
+    [LevelController carMovement:LM.playerCar AlongTrack:LM.trackVO WithDelta:0.001];
+    [LevelController cameraMovementCenteredOn:LM.playerCar ForLayer:LM.levelLayer];
+}
+
 -(void) createTrack:(TrackVO*) track WithTexture:(NSString*) texture{
     
     NSMutableArray *polyArray = [[[NSMutableArray alloc] init] autorelease];
-   // offsetPolyArray = [[NSMutableArray alloc] init];
+    // offsetPolyArray = [[NSMutableArray alloc] init];
     
-
+    
     float offset = 0.0f;
     int segments = 16;
     for(BezierCurve *curve in track.trackPoints){
@@ -78,7 +85,7 @@
     
     
     return;
-
+    
 }
 
 -(void) dealloc{
@@ -86,65 +93,65 @@
 }
 
 /*
--(void) update:(ccTime) dt{
-    LevelModel *LM = [LevelModel sharedInstance];
-//    [LevelController update:dt];
-    
-    //updates carPosition
-
-    float realSpeed = (LM.playerCar.speed+LM.playerCar.boost);
-    //updates cars trackPosition, its abstract
-    [LevelController findParameterOnTrack:LM.trackVO WithCar:LM.playerCar WithSpeed:realSpeed*dt];
-    
-
-    if(LM.isTouching){
-        LM.playerCar.speed += 5.0;
-    }
-    
-    LM.playerCar.speed = LM.playerCar.speed * 0.96;
-    LM.playerCar.boost = LM.playerCar.boost * 0.9;
-    
-   // NSLog(@"realSpeed: %f", realSpeed);
-    
-    //camera movement
-    BezierCurve *carCurve = [LM.trackVO.trackPoints objectAtIndex:LM.playerCar.carTrackPosition.index];
-    CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:LM.playerCar.carTrackPosition.time];
-    //updates cars position in game world
-    LM.playerCar.previousPosition = LM.playerCar.position;
-    LM.playerCar.position = carSpot;
-    CGPoint layerPosition = ccp( 240*self.scaleX - carSpot.x*self.scaleX, 180*self.scaleY - carSpot.y*self.scaleY);
-    self.position = layerPosition;
-    self.scaleX = .5;
-    self.scaleY = .5;
-    
-    
-    
-    
-    //do health checking stuff
-    LM.playerCar.previousVelocity = LM.playerCar.currentVelocity;
-    LM.playerCar.currentVelocity = ccp(LM.playerCar.position.x - LM.playerCar.previousPosition.x,
-                                         LM.playerCar.position.y - LM.playerCar.previousPosition.y);
-    
-    float angleBetweenVelocity = [MathLib calcAngleBetweenVectors:LM.playerCar.currentVelocity and:LM.playerCar.previousVelocity]/4;
-    if(angleBetweenVelocity > 1){
-        LM.playerCar.health += angleBetweenVelocity - 1; 
-    }else{
-        if(LM.playerCar.health > 0){
-            LM.playerCar.health -= 0.04;
-        }
-    }
-}
-*/
+ -(void) update:(ccTime) dt{
+ LevelModel *LM = [LevelModel sharedInstance];
+ //    [LevelController update:dt];
+ 
+ //updates carPosition
+ 
+ float realSpeed = (LM.playerCar.speed+LM.playerCar.boost);
+ //updates cars trackPosition, its abstract
+ [LevelController findParameterOnTrack:LM.trackVO WithCar:LM.playerCar WithSpeed:realSpeed*dt];
+ 
+ 
+ if(LM.isTouching){
+ LM.playerCar.speed += 5.0;
+ }
+ 
+ LM.playerCar.speed = LM.playerCar.speed * 0.96;
+ LM.playerCar.boost = LM.playerCar.boost * 0.9;
+ 
+ // NSLog(@"realSpeed: %f", realSpeed);
+ 
+ //camera movement
+ BezierCurve *carCurve = [LM.trackVO.trackPoints objectAtIndex:LM.playerCar.carTrackPosition.index];
+ CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:LM.playerCar.carTrackPosition.time];
+ //updates cars position in game world
+ LM.playerCar.previousPosition = LM.playerCar.position;
+ LM.playerCar.position = carSpot;
+ CGPoint layerPosition = ccp( 240*self.scaleX - carSpot.x*self.scaleX, 180*self.scaleY - carSpot.y*self.scaleY);
+ self.position = layerPosition;
+ self.scaleX = .5;
+ self.scaleY = .5;
+ 
+ 
+ 
+ 
+ //do health checking stuff
+ LM.playerCar.previousVelocity = LM.playerCar.currentVelocity;
+ LM.playerCar.currentVelocity = ccp(LM.playerCar.position.x - LM.playerCar.previousPosition.x,
+ LM.playerCar.position.y - LM.playerCar.previousPosition.y);
+ 
+ float angleBetweenVelocity = [MathLib calcAngleBetweenVectors:LM.playerCar.currentVelocity and:LM.playerCar.previousVelocity]/4;
+ if(angleBetweenVelocity > 1){
+ LM.playerCar.health += angleBetweenVelocity - 1; 
+ }else{
+ if(LM.playerCar.health > 0){
+ LM.playerCar.health -= 0.04;
+ }
+ }
+ }
+ */
 
 #pragma -
 #pragma draw
 -(void) draw{
     [super draw];
-//    BezierCurve *carCurve = [self.trackVO.trackPoints objectAtIndex:self.carPosition.index];
+    //    BezierCurve *carCurve = [self.trackVO.trackPoints objectAtIndex:self.carPosition.index];
     
-  //  CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:self.carPosition.time];
-        LevelModel *LM = [LevelModel sharedInstance];
-//    ccDrawCircle(LM.playerCar.position, 10,0,16,NO);
+    //  CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:self.carPosition.time];
+    LevelModel *LM = [LevelModel sharedInstance];
+    //    ccDrawCircle(LM.playerCar.position, 10,0,16,NO);
     
     if( LM.trackVO != NULL){
         if( ![LM.trackVO isParsing] ){
@@ -153,7 +160,7 @@
             }
         }
     }
-
+    
     
 }
 
@@ -164,48 +171,54 @@
 
 -(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-        LevelModel *LM = [LevelModel sharedInstance];
-    UITouch *touch = [touches anyObject];
-	CGPoint location = [touch locationInView: [touch view]];
-	// IMPORTANT:
-	// The touches are always in "portrait" coordinates. You need to convert them to your current orientation
-	CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
     
-    LM.isTouching = YES;
-    LM.touchBegan = convertedPoint;
-    LM.previousTouch = convertedPoint;
+    LevelModel *LM = [LevelModel sharedInstance];
+    if(LM.raceInProgress){
+        UITouch *touch = [touches anyObject];
+        CGPoint location = [touch locationInView: [touch view]];
+        // IMPORTANT:
+        // The touches are always in "portrait" coordinates. You need to convert them to your current orientation
+        CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
+        
+        LM.isTouching = YES;
+        LM.touchBegan = convertedPoint;
+        LM.previousTouch = convertedPoint;
+    }
 }
 
 
 -(void)ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-        LevelModel *LM = [LevelModel sharedInstance];
-    UITouch *touch = [touches anyObject];
-	CGPoint location = [touch locationInView: [touch view]];
-	// IMPORTANT:
-	// The touches are always in "portrait" coordinates. You need to convert them to your current orientation
-	CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
-    
-    LM.previousTouch = LM.currentTouch;
-    LM.currentTouch = convertedPoint;
-    
-    [LevelController carBoostPreviousPos:LM.previousTouch AndCurrentPos:LM.currentTouch];
-    
+    LevelModel *LM = [LevelModel sharedInstance];
+    if(LM.raceInProgress){
+        UITouch *touch = [touches anyObject];
+        CGPoint location = [touch locationInView: [touch view]];
+        // IMPORTANT:
+        // The touches are always in "portrait" coordinates. You need to convert them to your current orientation
+        CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
+        
+        LM.previousTouch = LM.currentTouch;
+        LM.currentTouch = convertedPoint;
+        
+        [LevelController carBoostPreviousPos:LM.previousTouch AndCurrentPos:LM.currentTouch];
+    }
 }
 
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-        LevelModel *LM = [LevelModel sharedInstance];
-	UITouch *touch = [touches anyObject];
-	CGPoint location = [touch locationInView: [touch view]];
-	// IMPORTANT:
-	// The touches are always in "portrait" coordinates. You need to convert them to your current orientation
-	CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
-
-    LM.isTouching = NO;
-    LM.previousTouch = LM.currentTouch;
-    LM.currentTouch = convertedPoint;
-    LM.touchEnd = convertedPoint;
+    LevelModel *LM = [LevelModel sharedInstance];
+    if(LM.raceInProgress){
+        UITouch *touch = [touches anyObject];
+        CGPoint location = [touch locationInView: [touch view]];
+        // IMPORTANT:
+        // The touches are always in "portrait" coordinates. You need to convert them to your current orientation
+        CGPoint convertedPoint = [[CCDirector sharedDirector] convertToGL:location];
+        
+        LM.isTouching = NO;
+        LM.previousTouch = LM.currentTouch;
+        LM.currentTouch = convertedPoint;
+        LM.touchEnd = convertedPoint;
+    }
 }
 
 @end

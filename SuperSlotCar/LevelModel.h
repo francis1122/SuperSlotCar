@@ -16,6 +16,7 @@
 @class LevelLayer;
 @class GameUILayer;
 @class BackgroundLayer;
+@class RaceOverLayer;
 @interface LevelModel : NSObject{
     
     
@@ -31,25 +32,34 @@
     CGPoint currentTouch;
     CGPoint touchEnd;
 
+    BOOL raceInProgress;
+    BOOL isCountDownToRaceStarted;
+    float countDownToRaceStart;
+    float raceTime;
+    BOOL isRaceOver;
     
     //gameLayers
-    GameUILayer *gameUILayer;
-    LevelLayer *levelLayer;
+
     GameLayer *gameLayer;
+    RaceOverLayer *raceOverLayer;
+    LevelLayer *levelLayer;
+    GameUILayer *gameUILayer;
     BackgroundLayer *backgroundLayer;
     
 
 }
 
+@property float raceTime, countDownToRaceStart;
 @property (nonatomic, retain) CarSprite *playerCar;
 @property (nonatomic, retain) TrackVO *trackVO;
-@property BOOL isTouching;
+@property BOOL isTouching, raceInProgress, isCountDownToRaceStarted, isRaceOver;
 @property CGPoint touchBegan, previousTouch, currentTouch, touchEnd;
 
 // gameLayers
+@property (nonatomic, retain) GameLayer *gameLayer;
+@property (nonatomic, retain) RaceOverLayer *raceOverLayer;
 @property (nonatomic, retain) GameUILayer *gameUILayer;
 @property (nonatomic, retain) LevelLayer *levelLayer;
-@property (nonatomic, retain) GameLayer *gameLayer;
 @property (nonatomic, retain) BackgroundLayer *backgroundLayer;
 
 

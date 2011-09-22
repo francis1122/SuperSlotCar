@@ -58,4 +58,10 @@
     return angle + 360;
 }
 
++(CGPoint) normalizeVector:(CGPoint) vector{
+    float length = sqrtf(vector.x * vector.x + vector.y *vector.y);
+    CGPoint normlizedVector = CGPointMake(vector.x/length, vector.y/length);
+    return normlizedVector;
+}
+
 @end

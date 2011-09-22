@@ -11,10 +11,10 @@
 #import "LevelLayer.h"
 #import "LevelModel.h"
 #import "BackgroundLayer.h"
+#import "RaceOverLayer.h"
 
 @implementation GameLayer
 
-//@synthesize gameUILayer, levelLayer;
 
 -(id) init	
 {
@@ -24,27 +24,28 @@
         
         //create the layers
         
-        BackgroundLayer *bL = [BackgroundLayer node];
-        backgroundLayer = bL;
-        
-        LevelLayer *lL = [LevelLayer node];
-        levelLayer = lL;
-        LM.levelLayer = lL;
-        
-        GameUILayer *gUL = [GameUILayer node];
-        gameUILayer = gUL;
-        LM.gameUILayer = gUL;
+        backgroundLayer = [BackgroundLayer node];
+        LM.backgroundLayer = backgroundLayer;
         
 
+        levelLayer =  [LevelLayer node];
+        LM.levelLayer = levelLayer;
+        
+        gameUILayer = [GameUILayer node];
+        LM.gameUILayer = gameUILayer;
+        
+        raceOverLayer = [RaceOverLayer node];
+        LM.raceOverLayer = raceOverLayer;
+        
+        [self addChild:backgroundLayer z:0 tag:0];
+        [self addChild:levelLayer z:1 tag:1];
+        [self addChild:gameUILayer z:2 tag:2];
+//        [self addChild:raceOverLayer z:3 tag:3];
         
         
-        [self addChild:backgroundLayer];
-        [self addChild:gameUILayer];
-        [self addChild:levelLayer];
-        
-        
-        //resolve starte
+        //resolve start
         [backgroundLayer resolve];
+        [levelLayer resolve];
 
 
     }
@@ -52,8 +53,10 @@
 }
 
 -(void) dealloc{
+    [backgroundLayer release];
     [gameUILayer release];
     [levelLayer release];
+    [raceOverLayer release];
     [super dealloc];	
 }
 

@@ -13,7 +13,8 @@ static LevelModel *sharedInstance = nil;
 @implementation LevelModel
 
 @synthesize trackVO, playerCar, isTouching, touchBegan, previousTouch, currentTouch, touchEnd,
-gameLayer, gameUILayer, levelLayer, backgroundLayer;
+gameLayer, gameUILayer, levelLayer, backgroundLayer, raceTime, raceInProgress, countDownToRaceStart,
+isCountDownToRaceStarted, raceOverLayer, isRaceOver;
 
 + (id)sharedInstance{ 
     @synchronized(self){
@@ -29,6 +30,11 @@ gameLayer, gameUILayer, levelLayer, backgroundLayer;
     self = [super init];
     if (self) {
         // Initialization code here.
+        self.raceTime = 0.0f;
+        self.countDownToRaceStart = 0.0f;
+        self.raceInProgress = NO;
+        self.isCountDownToRaceStarted = NO;
+        self.isRaceOver = NO;
     }
     
     return self;

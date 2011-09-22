@@ -12,15 +12,15 @@
 @class LevelLayer;
 @class GameUILayer;
 @class BackgroundLayer;
+@class RaceOverLayer;
 @interface GameLayer : CCLayer {
     LevelLayer *levelLayer;
     GameUILayer *gameUILayer;
     BackgroundLayer *backgroundLayer;
+    RaceOverLayer *raceOverLayer;
     
 }
 
-//@property (nonatomic, retain) LevelLayer *levelLayer;
-//@property (nonatomic, retain) GameUILayer *gameUILayer;
-//@property (nona
+
 
 @end

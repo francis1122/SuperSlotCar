@@ -12,11 +12,14 @@
 @interface LevelController : NSObject {
     
 }
++(void) update:(ccTime) dt;
+
++ (void) updateRaceCountdown:(ccTime) dt;
 
 //u1 is current spot on curve, and s is the speed of movement
 + (void) findParameterOnTrack:(TrackVO*)track WithCar:(CarSprite*) car WithSpeed:(float) s;
 
-+(void) update:(ccTime) dt;
++(void) checkVictoryCondition:(CarSprite *) car;
 
 +(void) cameraMovementCenteredOn:(CarSprite*) car ForLayer:(CCLayer*) layer;
 

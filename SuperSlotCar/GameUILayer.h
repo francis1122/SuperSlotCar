@@ -11,6 +11,8 @@
 
 @interface GameUILayer : CCLayer {
     
+    CCMenu *startMenu;
+    
 }
 
 @end

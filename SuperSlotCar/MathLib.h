@@ -24,7 +24,7 @@
 //returns in degrees
 +(float) calcAngle:(CGPoint) p1 and:(CGPoint)p2;
 
-
++(CGPoint) normalizeVector:(CGPoint) vector;
 
 
 @end

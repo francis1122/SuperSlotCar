@@ -17,6 +17,8 @@
 
 -(id) init;
 
+-(void) resolve;
+
 -(void)dealloc;
 
 -(void) createTrack:(TrackVO*) track WithTexture:(NSString*) texture;

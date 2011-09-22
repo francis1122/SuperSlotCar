@@ -15,9 +15,45 @@
 @implementation GameUILayer
 
 
+-(id) init	
+{
+	
+	if( (self=[super init])) {
+        
+        CCSprite *sprite10 = [CCSprite spriteWithFile:@"Icon-72.png"];
+        CCSprite *sprite11 = [CCSprite spriteWithFile:@"Icon-72.png"];
+        CCSprite *sprite12 = [CCSprite spriteWithFile:@"Icon-72.png"];
+        CCMenuItemSprite *raceBeginButton = [CCMenuItemSprite itemFromNormalSprite:sprite10 selectedSprite:sprite11 disabledSprite:sprite12 target:self selector:@selector(raceBeginButtonTouched:)];
+        raceBeginButton.position = ccp(220, 50);
+        raceBeginButton.tag = 0;
+        
+        
+        
+        startMenu = [CCMenu menuWithItems:raceBeginButton,  nil];
+        startMenu.position = CGPointZero;
+        
+        [self addChild:startMenu];
+        
 
+    }
+    return self;
+}
 
+#pragma -
+#pragma button touches
 
+-(void)raceBeginButtonTouched:(CCMenuItem*)sender{
+    //begin countdown to start of the race
+    LevelModel *LM = [LevelModel sharedInstance];
+    LM.countDownToRaceStart = 3.0f;
+    LM.isCountDownToRaceStarted = YES;
+    
+    //remove the raceBeginButton
+    [self removeChild:startMenu cleanup:YES];
+    
+    
+    
+}
 
 #pragma -
 #pragma draw

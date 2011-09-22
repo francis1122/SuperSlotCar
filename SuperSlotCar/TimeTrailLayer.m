@@ -45,10 +45,24 @@
     CCMenuItemSprite *spriteTimeTrailButton1 = [CCMenuItemSprite itemFromNormalSprite:sprite4 selectedSprite:sprite5 disabledSprite:sprite6 target:self selector:@selector(trackSelectorTouched:)];
     spriteTimeTrailButton1.position = ccp(220, 140);
     spriteTimeTrailButton1.tag = 1;
+    
+    CCSprite *sprite7 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCSprite *sprite8 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCSprite *sprite9 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCMenuItemSprite *spriteTimeTrailButton2 = [CCMenuItemSprite itemFromNormalSprite:sprite7 selectedSprite:sprite8 disabledSprite:sprite9 target:self selector:@selector(trackSelectorTouched:)];
+    spriteTimeTrailButton2.position = ccp(120, 50);
+    spriteTimeTrailButton2.tag = 2;
+    
+    CCSprite *sprite10 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCSprite *sprite11 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCSprite *sprite12 = [CCSprite spriteWithFile:@"Icon-72.png"];
+    CCMenuItemSprite *spriteTimeTrailButton3 = [CCMenuItemSprite itemFromNormalSprite:sprite10 selectedSprite:sprite11 disabledSprite:sprite12 target:self selector:@selector(trackSelectorTouched:)];
+    spriteTimeTrailButton3.position = ccp(220, 50);
+    spriteTimeTrailButton3.tag = 3;
 
 
     
-    CCMenu *menu = [CCMenu menuWithItems:spriteTimeTrailButton,spriteTimeTrailButton1, nil];
+    CCMenu *menu = [CCMenu menuWithItems:spriteTimeTrailButton, spriteTimeTrailButton1, spriteTimeTrailButton2,spriteTimeTrailButton3, nil];
     menu.position = CGPointZero;
     [self addChild:menu];
     
@@ -63,6 +77,10 @@
         case 1:
                 MDM.currentTrackFile = @"track01";
             break;
+        case 2:
+                MDM.currentTrackFile = @"track02";
+        case 3:
+                MDM.currentTrackFile = @"track03";
         default:
             break;
     }

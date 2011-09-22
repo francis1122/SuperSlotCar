@@ -11,11 +11,40 @@
 #import "LevelLayer.h"
 #import "TrackVO.h"
 #import "CarSprite.h"
+#import "RaceOverLayer.h"
 #import "LevelModel.h"
 
 
 @implementation LevelController
 
+
++(void) update:(ccTime) dt{
+    LevelModel *LM = [LevelModel sharedInstance];
+    //if the race is in progress, update the car and interact withthe player stuff
+    
+    
+    if(LM.raceInProgress){
+        LM.raceTime += dt;
+        [LevelController carMovement:LM.playerCar AlongTrack:LM.trackVO WithDelta:dt];
+        [LevelController cameraMovementCenteredOn:LM.playerCar ForLayer:LM.levelLayer];
+        [LevelController carHealthUpdate:LM.playerCar WithDelta:dt];
+        [LevelController checkVictoryCondition:LM.playerCar];
+    }else{
+        if(LM.isCountDownToRaceStarted){
+            [LevelController updateRaceCountdown:dt];
+        }
+    }
+}
+
++ (void) updateRaceCountdown:(ccTime) dt{
+    LevelModel *LM = [LevelModel sharedInstance];
+    
+    LM.countDownToRaceStart -= dt;
+    if(LM.countDownToRaceStart < 0.0f){
+        LM.raceInProgress = YES;
+    }
+    
+}
 
 + (void) findParameterOnTrack:(TrackVO*)track WithCar:(CarSprite*) car WithSpeed:(float) s
 {
@@ -29,6 +58,7 @@
             car.carTrackPosition.index++;
         }else{
             car.carTrackPosition.index = 0;
+            car.currentLap++;
         }
         car.carTrackPosition.time = 0;
         if([track.trackPoints count] >= car.carTrackPosition.index){
@@ -40,7 +70,7 @@
         }
         
         car.carTrackPosition.time = 0.0f;
-        float newSpeed = s- lengthLeft;
+        float newSpeed = s - lengthLeft;
         [LevelController findParameterOnTrack:track WithCar:car WithSpeed: newSpeed];
         return;
     }
@@ -55,13 +85,17 @@
 
 
 
-+(void) update:(ccTime) dt{
++(void) checkVictoryCondition:(CarSprite *) car{
     LevelModel *LM = [LevelModel sharedInstance];
-    
-    [LevelController carMovement:LM.playerCar AlongTrack:LM.trackVO WithDelta:dt];
-    [LevelController cameraMovementCenteredOn:LM.playerCar ForLayer:LM.levelLayer];
-    [LevelController carHealthUpdate:LM.playerCar WithDelta:dt];
-    
+    if(car.currentLap > 2 && !LM.isRaceOver){
+        NSLog(@"victory");
+
+        LM.isRaceOver = YES;
+        [LM.gameLayer addChild:LM.raceOverLayer z:3 tag:3];
+//        LM.Leve LM.raceOverLayer
+        
+    }
+    NSLog(@"currentLap: %d", car.currentLap);
 }
 
 +(void) cameraMovementCenteredOn:(CarSprite*) car ForLayer:(CCLayer*) layer{
@@ -149,7 +183,7 @@
             offset = car.offset - 0.7f;
         }
     }
-    float bobbing = 6*sinf(car.lifeTime*3);
+    float bobbing = 8*sinf(car.lifeTime*4);
     car.offset = offset;
     offset += bobbing;
     GLfloat offsetX = position.x - offset * (deltaPosition.y/sqrtf(deltaPosition.x * deltaPosition.x + deltaPosition.y * deltaPosition.y));
@@ -167,26 +201,29 @@
 
 +(void) carHealthUpdate:(CarSprite*) car WithDelta:(ccTime)dt{
     car.previousVelocity = car.currentVelocity;
+    //need to normalize the velocity;
     car.currentVelocity = ccp(car.position.x - car.previousPosition.x,
                               car.position.y - car.previousPosition.y);
+    car.currentVelocity = [MathLib normalizeVector:car.currentVelocity];
     
     
     //checks make sure the numbers dont break the health system
-    if(car.lifeTime > 1.0f && car.boost > 25.0f){
+    if(car.lifeTime > 1.0f && car.boost > 60.0f){
         car.normalizeState++;
-        if(car.normalizeState > 4){
+        if(car.normalizeState > 8){
             float angleBetweenVelocity = [MathLib calcAngleBetweenVectors:car.currentVelocity and:car.previousVelocity];
 //            NSLog(@"angleBetweenVelocity: %f", angleBetweenVelocity);
 //            if(angleBetweenVelocity > 1.0f){
     //            car.health += angleBetweenVelocity - 1.0f; 
   //          }
             float change = angleBetweenVelocity/4;
-                            NSLog(@"change: %f", angleBetweenVelocity);
+                           // NSLog(@"change: %f", angleBetweenVelocity);
             if(!isnan(angleBetweenVelocity)){
   //              NSLog(@"change: %f", change);
-                float lim = 0.4f;
+                float lim = 0.55f;
                 if(change > lim){
-                    car.health += change - lim;
+//                    car.health += change - lim;
+                    car.health += 0.15f * (1+car.boost/800);
                 }
             }
             //evaluate if the health is to high and the car should be inactive
@@ -198,7 +235,7 @@
         car.normalizeState = 0;
     }
     if(car.health > 0.0f){
-        car.health -= 0.07f;
+        car.health -= 0.05f;
     }
     if(car.health < 0.0f){
         car.health = 0.0f;

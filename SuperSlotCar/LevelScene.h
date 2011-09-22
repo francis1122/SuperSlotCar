@@ -11,17 +11,18 @@
 
 @class LevelLayer;
 @class GameLayer;
+@class RaceOverLayer;
 @interface LevelScene  : CCScene {
-    //Layers
-    LevelLayer *levelLayer;
     GameLayer *gameLayer;
+    RaceOverLayer *raceOverLayer;
+    
     //UI should have its own layer here
     
     
 }
 
-@property (nonatomic, retain) LevelLayer *levelLayer;
 @property (nonatomic, retain) GameLayer *gameLayer;
+@property (nonatomic, retain) RaceOverLayer *raceOverLayer;
 
 
 -(id) init;

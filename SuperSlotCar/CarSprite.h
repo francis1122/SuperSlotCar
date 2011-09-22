@@ -22,8 +22,10 @@
     CGPoint previousPosition;
     CGPoint previousVelocity;
     CGPoint currentVelocity;
-
+    
+    //
     float health;
+    int currentLap;
  
     //movement variables
     int normalizeState;
@@ -43,7 +45,7 @@
 @property (nonatomic, retain) CurvePosition *carTrackPosition;
 @property float health, speed, boost, offset, bobbing, lifeTime, displayedSpeed, displayedHeatlh;
 @property BOOL isCoolingDown;
-@property int normalizeState;
+@property int normalizeState, currentLap;
 
 -(void)update:(ccTime) dt;
 

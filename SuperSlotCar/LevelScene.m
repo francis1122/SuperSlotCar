@@ -10,11 +10,11 @@
 #import "GameLayer.h"
 #import "LevelModel.h"
 #import "LevelController.h"
-
+#import "RaceOverLayer.h"
 
 @implementation LevelScene
 
-@synthesize levelLayer, gameLayer;
+@synthesize gameLayer;
 
 
 -(id) init{
@@ -24,9 +24,9 @@
 		[self schedule: @selector(gameLoop:)];
         
         LevelModel *LM = [LevelModel sharedInstance];
-        GameLayer *gL = [GameLayer node];
-        self.gameLayer = gL;
-        LM.gameLayer = gL;
+        
+        self.gameLayer = [GameLayer node];
+        LM.gameLayer = self.gameLayer;
         
         
         [self addChild:self.gameLayer];
@@ -46,8 +46,6 @@
     if(LM.levelLayer){
         [LevelController update:dt];
     }
-
-   // [self.levelLayer update:dt];
 }
     
 @end
