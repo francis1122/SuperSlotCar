@@ -7,14 +7,14 @@
 //
 
 #import "MenuLayer.h"
-#import "TimeTrailLayer.h"
+#import "TimeTrialLayer.h"
 
 
 @implementation MenuLayer
 
 -(id) init{
 	if( (self=[super init] )) {
-        CCLabelTTF* greatest = [CCLabelTTF labelWithString:@"Super Slot Car" fontName:@"AppleGothic" fontSize:20];
+        CCLabelTTF* greatest = [CCLabelTTF labelWithString:@"Super Slot Car" fontName:SUPERSLOTCAR_FONT_1 fontSize:20];
         greatest.position = ccp(280, 249);
         ccColor3B green = {154, 255, 56};
         [greatest setColor:green];
@@ -41,7 +41,7 @@
 -(void)timeTrailTouched:(CCMenuItem*)sender{
     
     NSLog(@"touched");
-    [[CCDirector sharedDirector] replaceScene:[TimeTrailLayer node]];
+    [[CCDirector sharedDirector] replaceScene:[TimeTrialLayer node]];
 }
     
 @end

@@ -15,7 +15,7 @@
 
 -(void) resolve{
     LevelModel *LM = [LevelModel sharedInstance];
-  //  [self createRect:CGRectMake(-500, -500, 1000, 1000) WithTexture:@"Icon.png"];
+    [self createRect:CGRectMake(-500, -500, 1000, 1000) WithTexture:@"clouds.png"];
     
     
     
@@ -41,10 +41,10 @@
     	
 	
     CCTexture2D *text = [[CCTextureCache sharedTextureCache] addImage:texture];
-    PRFilledPolygon *filledPolygon = [[[PRFilledPolygon alloc] initWithPoints:polyArray andTexture:text] autorelease];
+    PRFilledPolygon *filledPolygon = [[PRFilledPolygon alloc] initWithPoints:polyArray andTexture:text];
     
     
-    [self addChild:filledPolygon z:-2 tag:99];
+    [self addChild:filledPolygon z:0 tag:99];
     
     
     

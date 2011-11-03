@@ -12,14 +12,15 @@
 @implementation TrackVO
 
 @synthesize trackPoints;
-@synthesize xmlString, currentCurve, isParsing;
+@synthesize xmlString, currentCurve, isParsing, outlineCount;
 
 - (id)init
 {
     self = [super init];
     if (self) {
         // Initialization code here.
-        self.trackPoints = [[NSMutableArray alloc] init];
+        self.trackPoints = [[[NSMutableArray alloc] init] autorelease];
+//        self.trackOutline = [[[NSMutableArray alloc] init] autorelease]; 
         self.isParsing = YES;
     }
     
@@ -28,11 +29,100 @@
 
 - (void)dealloc
 {
+    free(trackOutline);
     [super dealloc];
 }
 
 
+-(void)createTrackOutlineWithPoints:(NSMutableArray*) _trackPoints{
+    NSMutableArray *polyArrayInner = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *polyArrayOuter = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *outlineA = [[[NSMutableArray alloc] init] autorelease];
+    
 
+    //inner points
+    int segments = 16;
+    float offset = 4.0f;
+    for(BezierCurve *curve in _trackPoints){
+        float u = 0;
+        for(NSUInteger i = 0; i < segments; i++)
+        {
+            CGPoint position = [BezierCurve findPositionOnCurve:curve atTime:u];
+            CGPoint dP = [BezierCurve findDerivativeOnCurve:curve atTime:u];
+            //offset the bastard
+            GLfloat sX = position.x + offset * ( dP.y/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            GLfloat sY = position.y + offset * ( -dP.x/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            NSValue *point = [NSValue valueWithCGPoint: ccp(sX * CC_CONTENT_SCALE_FACTOR(), sY * CC_CONTENT_SCALE_FACTOR())];
+            [polyArrayInner addObject:point];
+            u += 1.0f / segments;
+        }
+    }
+    
+    //outer points
+    //    int segments = 16;
+    
+    offset = 0.0f;
+    for(BezierCurve *curve in _trackPoints){
+        float u = 0;
+        for(NSUInteger i = 0; i < segments; i++)
+        {
+            
+            CGPoint position = [BezierCurve findPositionOnCurve:curve atTime:u];
+            CGPoint dP = [BezierCurve findDerivativeOnCurve:curve atTime:u];
+            //offset the bastard
+            GLfloat sX = position.x + offset * ( dP.y/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            GLfloat sY = position.y + offset * ( -dP.x/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            NSValue *point = [NSValue valueWithCGPoint: ccp(sX * CC_CONTENT_SCALE_FACTOR(), sY * CC_CONTENT_SCALE_FACTOR())];
+            [polyArrayOuter addObject:point];
+            u += 1.0f / segments;
+            
+            
+        }
+    }
+    
+    for(int i = 0; i < polyArrayInner.count - 1; i++){
+        
+        
+        CGPoint interA = [[polyArrayInner objectAtIndex:i] CGPointValue];
+        CGPoint outerA = [[polyArrayOuter objectAtIndex:i] CGPointValue];
+        CGPoint interB = [[polyArrayInner objectAtIndex:i+1] CGPointValue];
+        CGPoint outerB = [[polyArrayOuter objectAtIndex:i+1] CGPointValue];
+        
+        
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(interA.x * CC_CONTENT_SCALE_FACTOR(), interA.y * CC_CONTENT_SCALE_FACTOR())]];
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(outerA.x * CC_CONTENT_SCALE_FACTOR(), outerA.y * CC_CONTENT_SCALE_FACTOR())]];
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(outerB.x * CC_CONTENT_SCALE_FACTOR(), outerB.y * CC_CONTENT_SCALE_FACTOR())]];
+        
+        
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(outerB.x * CC_CONTENT_SCALE_FACTOR(), outerB.y * CC_CONTENT_SCALE_FACTOR())]];
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(interB.x * CC_CONTENT_SCALE_FACTOR(), interB.y * CC_CONTENT_SCALE_FACTOR())]];
+        [outlineA addObject:[NSValue valueWithCGPoint: ccp(interA.x * CC_CONTENT_SCALE_FACTOR(), interA.y * CC_CONTENT_SCALE_FACTOR())]];
+  
+        
+        
+    }
+    
+    outlineCount = outlineA.count;
+    trackOutline = (CGPoint*)malloc(sizeof(CGPoint)*outlineCount);
+    
+    [NSValue valueWithCGPoint:CGPointMake(5.5, 6.6)] ;
+    //fill up opengl array
+    for(int i = 0; i < outlineCount; i++){
+        CGPoint value = [[outlineA objectAtIndex:i] CGPointValue];
+//        [NSValue valueWithCGPoint:value];
+        trackOutline[i] = value;
+  //      [outlineArray addObject:[outlineA objectAtIndex:i]];
+        
+        
+    }
+    
+    
+}
+
+-(CGPoint *)getTrackOutline{
+    
+    return trackOutline;
+}
 
 # pragma mark ---------- PARSER ----------
 // parse the level assets for use in gameplay
@@ -111,6 +201,8 @@
     for(BezierCurve *curve in self.trackPoints){
         [curve computeArcLengths];
     }
+    //calculate the outline
+    [self createTrackOutlineWithPoints:self.trackPoints];
     self.isParsing = NO;
 }
 

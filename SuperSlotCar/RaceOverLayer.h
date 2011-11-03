@@ -10,8 +10,12 @@
 #import "cocos2d.h"
 
 @interface RaceOverLayer : CCLayer {
+    CCLabelTTF* raceTimeLabel;
+
     
 }
+
+@property (nonatomic, retain)     CCLabelTTF* raceTimeLabel;
 
 -(id) init;
 
@@ -19,9 +23,9 @@
 #pragma button touches
 
 
-
 -(void)rematchButtonTouched:(CCMenuItem*)sender;
 
 -(void) mainMenuButtonTouched:(CCMenuItem*)sender;
+
 
 @end

@@ -12,7 +12,13 @@
 @interface GameUILayer : CCLayer {
     
     CCMenu *startMenu;
+    CCLabelTTF *lapCountLabel;
     
 }
+
+@property (nonatomic, retain) CCLabelTTF *lapCountLabel;
+
+
+-(void) setupLapCounter;
 
 @end

@@ -6,6 +6,8 @@
 //  Copyright 2010 Precognitive Research, LLC. All rights reserved.
 //
 
+
+
 #import "PRFilledPolygon.h"
 #import "PRRatcliffTriangulator.h"
 
@@ -32,7 +34,7 @@
 
 /**
  Returns an autoreleased filled poly with a supplied triangulator.
- */
+ **/
 +(id) filledPolygonWithPoints:(NSArray *)polygonPoints andTexture:(CCTexture2D *)fillTexture usingTriangulator: (id<PRTriangulator>) polygonTriangulator {
     return [[[PRFilledPolygon alloc] initWithPoints:polygonPoints andTexture:fillTexture usingTriangulator:polygonTriangulator] autorelease];
 }
@@ -69,9 +71,7 @@
     for (int i = 0; i < areaTrianglePointCount; i++) {
         areaTrianglePoints[i] = [[triangulatedPoints objectAtIndex:i] CGPointValue];
     }
-    
     [self calculateTextureCoordinates];
-
 }
 
 -(void) calculateTextureCoordinates {
@@ -83,15 +83,18 @@
 -(void) draw {
 	// we have a pointer to vertex points so enable client state
 	glBindTexture(GL_TEXTURE_2D, self.texture.name);
-	
+	glDisable(GL_BLEND);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	
 	glVertexPointer(2, GL_FLOAT, 0, areaTrianglePoints);
 	glTexCoordPointer(2, GL_FLOAT, 0, textureCoordinates);
 	
+    //blend
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 	glDrawArrays(GL_TRIANGLES, 0, areaTrianglePointCount);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	
+	glEnable(GL_BLEND);	
 	//Restore texture matrix and switch back to modelview matrix
 	glEnableClientState(GL_COLOR_ARRAY);
 	

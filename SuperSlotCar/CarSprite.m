@@ -12,7 +12,7 @@
 
 @implementation CarSprite
 
-@synthesize carTrackPosition, health, speed, boost, previousPosition, previousVelocity, currentVelocity, offset, bobbing, lifeTime, displayedSpeed, 
+@synthesize carTrackPosition, health, speed, boost, previousPosition, previousVelocity, currentVelocity, offset, bobbing, lifeTime, displayedSpeed, isNewLap,
     displayedHeatlh, isCoolingDown, normalizeState, currentLap;
 
 -(id) initWithTexture:(CCTexture2D*)texture rect:(CGRect)rect
@@ -37,6 +37,7 @@
         self.displayedHeatlh = 0.0f;
         self.displayedSpeed = 0.0f;
         self.isCoolingDown = NO;
+        self.isNewLap = NO;
         self.normalizeState = 0;
         
 	}
@@ -46,6 +47,7 @@
 -(void) dealloc{
     [super dealloc];
 }
+
 
 -(void)update:(ccTime) dt{
     

@@ -130,9 +130,21 @@ void ccDrawPoly( const CGPoint *poli, NSUInteger numberOfPoints, BOOL closePolyg
 	// Unneeded states: GL_TEXTURE_2D, GL_TEXTURE_COORD_ARRAY, GL_COLOR_ARRAY	
 	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+	//glDisableClientState(GL_COLOR_ARRAY);
 
-	
+    GLubyte colorArray[numberOfPoints*4];
+    for(int i = 0; i < numberOfPoints*4; i++){
+        if(i%4 == 3){
+            colorArray[i] = 255;
+        }else{
+            colorArray[i] = 0;
+        }
+        
+    }
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, colorArray);
+    glEnableClientState(GL_COLOR_ARRAY);
+    
+    
 	// iPhone and 32-bit machines
 	if( sizeof(CGPoint) == sizeof(ccVertex2F) ) {
 
@@ -161,7 +173,7 @@ void ccDrawPoly( const CGPoint *poli, NSUInteger numberOfPoints, BOOL closePolyg
 	if( closePolygon )
 		glDrawArrays(GL_LINE_LOOP, 0, (GLsizei) numberOfPoints);
 	else
-		glDrawArrays(GL_LINE_STRIP, 0, (GLsizei) numberOfPoints);
+		glDrawArrays(GL_TRIANGLES, 0, (GLsizei) numberOfPoints);
 	
 	// restore default state
 	glEnableClientState(GL_COLOR_ARRAY);

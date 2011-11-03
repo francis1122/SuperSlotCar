@@ -11,7 +11,7 @@
 
 @interface LevelLayer : CCLayer {
 
-    
+    NSMutableArray *outline;
     
 }
 
@@ -22,6 +22,7 @@
 -(void)dealloc;
 
 -(void) createTrack:(TrackVO*) track WithTexture:(NSString*) texture;
+
 
 -(void) update:(ccTime) dt;
 

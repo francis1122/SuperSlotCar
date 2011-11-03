@@ -53,10 +53,6 @@
 }
 
 -(void) dealloc{
-    [backgroundLayer release];
-    [gameUILayer release];
-    [levelLayer release];
-    [raceOverLayer release];
     [super dealloc];	
 }
 

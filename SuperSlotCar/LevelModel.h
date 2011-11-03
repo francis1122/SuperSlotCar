@@ -23,7 +23,6 @@
     TrackVO *trackVO;
     
     CarSprite *playerCar;
-
     
     //touch state
     BOOL isTouching;
@@ -64,5 +63,8 @@
 
 
 + (id)sharedInstance;
+
+//clears all variables
+-(void) reset;
 
 @end

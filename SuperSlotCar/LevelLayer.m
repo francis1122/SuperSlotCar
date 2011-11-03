@@ -17,11 +17,8 @@
 
 @implementation LevelLayer
 
-
-
 -(id) init	
 {
-	
 	if( (self=[super init])) {
         MasterDataModel *MDM = [MasterDataModel sharedInstance];
         //load track
@@ -33,12 +30,11 @@
             [[CCDirector sharedDirector] replaceScene:[MenuLayer node]];
         }
         
-        
         LM.playerCar = [[CarSprite alloc] initWithFile:@"Icon-72.png"];
         [self addChild:LM.playerCar z:1 tag: 2];
         self.isTouchEnabled = YES;
         
-        [self createTrack:LM.trackVO WithTexture:@"track0BG.png"];
+        [self createTrack:LM.trackVO WithTexture:@"repeat.png"];
     }
     return self;
 }
@@ -55,8 +51,7 @@
     NSMutableArray *polyArray = [[[NSMutableArray alloc] init] autorelease];
     // offsetPolyArray = [[NSMutableArray alloc] init];
     
-    
-    float offset = 0.0f;
+    float offset = 4.0f;
     int segments = 16;
     for(BezierCurve *curve in track.trackPoints){
         float u = 0;
@@ -65,27 +60,19 @@
             CGPoint position = [BezierCurve findPositionOnCurve:curve atTime:u];
             CGPoint dP = [BezierCurve findDerivativeOnCurve:curve atTime:u];
             //offset the bastard
-            GLfloat sX = position.x + 1 * ( dP.y/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
-            GLfloat sY = position.y + 1 * ( -dP.x/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            GLfloat sX = position.x + offset * ( dP.y/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
+            GLfloat sY = position.y + offset * ( -dP.x/ sqrtf(dP.x * dP.x + dP.y * dP.y) ); 
             NSValue *point = [NSValue valueWithCGPoint: ccp(sX * CC_CONTENT_SCALE_FACTOR(), sY * CC_CONTENT_SCALE_FACTOR())];
             [polyArray addObject:point];
             u += 1.0f / segments;
         }
     }
-	
-	
-	
     CCTexture2D *text = [[CCTextureCache sharedTextureCache] addImage:texture];
-    PRFilledPolygon *filledPolygon = [[[PRFilledPolygon alloc] initWithPoints:polyArray andTexture:text] autorelease];
+    PRFilledPolygon *filledPolygon = [[PRFilledPolygon alloc] initWithPoints:polyArray andTexture:text];
     
-    
-    [self addChild:filledPolygon z:0 tag:1];
-    
-    
-    
+    [self addChild:filledPolygon z:0 tag:66];
     
     return;
-    
 }
 
 -(void) dealloc{
@@ -152,16 +139,25 @@
     //  CGPoint carSpot = [BezierCurve findPositionOnCurve:carCurve atTime:self.carPosition.time];
     LevelModel *LM = [LevelModel sharedInstance];
     //    ccDrawCircle(LM.playerCar.position, 10,0,16,NO);
-    
-    if( LM.trackVO != NULL){
-        if( ![LM.trackVO isParsing] ){
-            for(BezierCurve *curve in LM.trackVO.trackPoints){
-                ccDrawCubicBezier(curve.start, curve.control1, curve.control2, curve.end, 32);   
-            }
-        }
-    }
-    
-    
+    glLineWidth(1);
+    /*    if( LM.trackVO != NULL){
+     if( ![LM.trackVO isParsing] ){
+     for(BezierCurve *curve in LM.trackVO.trackPoints){
+     
+     ccDrawCubicBezier(curve.start, curve.control1, curve.control2, curve.end, 32);   
+     }
+     }
+     }
+     */
+    /*    CGPoint previous = [[outline objectAtIndex:0] CGPointValue];
+     for(NSValue *point in outline){
+     
+     ccDrawLine(previous, [point CGPointValue]);
+     previous = [point CGPointValue];
+     
+     }*/
+    glLineWidth(4);
+    ccDrawPoly([LM.trackVO getTrackOutline], LM.trackVO.outlineCount , NO);
 }
 
 #pragma -

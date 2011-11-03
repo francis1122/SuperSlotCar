@@ -18,6 +18,7 @@
 #import "CGPointWrapper.h"
 #import "MasterDataModel.h"
 #import "CurvePosition.h"
+#import "Constants.h"
 
 
 #endif

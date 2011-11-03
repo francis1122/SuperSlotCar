@@ -14,6 +14,7 @@
 
 @implementation GameUILayer
 
+@synthesize lapCountLabel;
 
 -(id) init	
 {
@@ -32,13 +33,25 @@
         startMenu = [CCMenu menuWithItems:raceBeginButton,  nil];
         startMenu.position = CGPointZero;
         
+        
         [self addChild:startMenu];
+        
+        [self setupLapCounter];
+        
         
 
     }
     return self;
 }
 
+
+-(void) setupLapCounter{
+    
+    self.lapCountLabel = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"LapCount", 0] fontName:SUPERSLOTCAR_FONT_1 fontSize:12];
+    self.lapCountLabel.position = ccp(50, 329);
+    
+    [self addChild: lapCountLabel];
+}
 #pragma -
 #pragma button touches
 
@@ -75,7 +88,7 @@
     
     glColor4f(1, 1, 1, 1);
     //speedLine
-    float speed = LM.playerCar.boost/10;
+    float speed = LM.playerCar.speed/10;
     ccDrawLine(ccp(20, 20), ccp(20, 20 + speed));
 }
 

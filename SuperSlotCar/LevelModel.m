@@ -40,6 +40,28 @@ isCountDownToRaceStarted, raceOverLayer, isRaceOver;
     return self;
 }
 
+-(void) reset{
+    
+    // Initialization code here.
+    self.raceTime = 0.0f;
+    self.countDownToRaceStart = 0.0f;
+    self.raceInProgress = NO;
+    self.isCountDownToRaceStarted = NO;
+    self.isRaceOver = NO;
+    
+    self.playerCar = NULL;
+    self.trackVO = NULL;
+    self.isTouching = NO;
+    self.raceInProgress = NO;
+    self.isCountDownToRaceStarted = NO;
+    self.isRaceOver = NO;
+    self.gameLayer = NULL;
+    self.raceOverLayer = NULL;
+    self.gameUILayer = NULL;
+    self.levelLayer = NULL;
+    self.backgroundLayer = NULL;
+    
+}
 
 -(void) dealloc{
     

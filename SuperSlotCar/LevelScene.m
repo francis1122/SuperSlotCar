@@ -46,6 +46,9 @@
     if(LM.levelLayer){
         [LevelController update:dt];
     }
+    if(LM.gameUILayer){
+        
+    }
 }
     
 @end

@@ -12,11 +12,14 @@
 
 @implementation RaceOverLayer
 
+@synthesize raceTimeLabel;
 
 -(id) init	
 {
 	
 	if( (self=[super init])) {
+        LevelModel *LM = [LevelModel sharedInstance];
+        
         
         CCSprite *sprite1 = [CCSprite spriteWithFile:@"Icon-72.png"];
         CCSprite *sprite2 = [CCSprite spriteWithFile:@"Icon-72.png"];
@@ -39,10 +42,20 @@
         
         [self addChild:menu];
         
+
+
+        self.raceTimeLabel = [[CCLabelTTF alloc] initWithString:[NSString stringWithFormat:@"racetime:%f", time] fontName:SUPERSLOTCAR_FONT_1 fontSize:22];
+        self.raceTimeLabel.position = CGPointMake(120, 200);
+        [self addChild:raceTimeLabel];
+        
+
         
     }
     return self;
 }
+
+
+
 
 #pragma -
 #pragma button touches
@@ -61,7 +74,8 @@
 }
 
 -(void) mainMenuButtonTouched:(CCMenuItem*)sender{
-        [[CCDirector sharedDirector] replaceScene:[MenuLayer node]];
+    [[LevelModel sharedInstance] reset];
+    [[CCDirector sharedDirector] replaceScene:[MenuLayer node]];
     
     
 }
